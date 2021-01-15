@@ -11,9 +11,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -49,6 +52,18 @@ public class AuthController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    @PutMapping(value = "/new-password/{id}")
+    public ResponseEntity<AppUser> updatePassword(@PathVariable Long id, @RequestBody AppUser user) {
+        Optional<AppUser> userOptional = this.userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        user.setId(userOptional.get().getId());
+        user.setUsername(userOptional.get().getUsername());
+        user.setFullname(userOptional.get().getFullname());
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
