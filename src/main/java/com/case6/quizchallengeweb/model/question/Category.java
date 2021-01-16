@@ -12,12 +12,13 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    @NotBlank(message = "Name is mandatory")
+    @Column(unique = true, name = "name")
     private String name;
 
     @OneToMany(mappedBy = "category")

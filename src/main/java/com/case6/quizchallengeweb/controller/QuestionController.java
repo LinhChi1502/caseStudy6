@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -38,22 +39,26 @@ public class QuestionController {
         return new ResponseEntity<>(insertQuestion, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping
-    public ResponseEntity<Question> updateQuestion(@RequestParam long id, @RequestBody Question question) {
-
-        Question question1 = questionService.updateQuestion(id, question);
-        if (question1 != null) {
-            return new ResponseEntity<>(question1, HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<Question> editQuestion(@PathVariable Long id, @RequestBody Question question) {
+        Optional<Question> optionalQuestion = questionService.findById(id);
+        return optionalQuestion.map(question1 -> {
+            question.setId(question1.getId());
+            return new ResponseEntity<>(questionService.save(question), HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
 
     @GetMapping("/search")
     public  ResponseEntity<List<Question>> searchQuestions(@RequestParam String searchText, @RequestParam String questType, @RequestParam String category) {
        List<Question> questions= questionService.getAllQuestByTypeIsAndCategoryIsAndTitleContaining(questType,category,searchText);
         return new ResponseEntity<>(questions, HttpStatus.ACCEPTED);
-
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+        Optional<Question> optionalQuestion = questionService.findById(id);
+        return optionalQuestion.map(question -> new ResponseEntity<>(question,HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }

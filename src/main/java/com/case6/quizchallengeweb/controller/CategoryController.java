@@ -4,7 +4,9 @@ import com.case6.quizchallengeweb.service.question.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,16 +31,20 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Category> insertCategory(@RequestBody Category category){
-        categoryService.save(category);
-        return new ResponseEntity<>(category, HttpStatus.ACCEPTED);
+        try {
+            categoryService.save(category);
+            return new ResponseEntity<>(category, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @DeleteMapping()
-    public  ResponseEntity<Category>deleteCategory(@RequestParam long id){
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Category>deleteCategory(@PathVariable Long id){
         try {
-            Category byId = categoryService.findById(id).get();
+            Category category = categoryService.findById(id).get();
             categoryService.delete(id);
-            return new ResponseEntity<>(byId, HttpStatus.OK);
+            return new ResponseEntity<>(category, HttpStatus.OK);
         }catch (Exception exception){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Provide correct Actor Id", exception);
@@ -57,5 +63,21 @@ public class CategoryController {
             ((HashMap) errors).put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable Long id) {
+        Optional<Category> optionalCategory = categoryService.findById(id);
+        return optionalCategory.map(category -> new ResponseEntity<>(category,HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> editCategory(@PathVariable Long id, @RequestBody Category category) {
+        Optional<Category> optionalCategory = categoryService.findById(id);
+        return optionalCategory.map(category1 -> {
+            category.setId(category1.getId());
+            return new ResponseEntity<>(categoryService.save(category), HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

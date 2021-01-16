@@ -1,7 +1,9 @@
 package com.case6.quizchallengeweb.service.question.question;
 
+import com.case6.quizchallengeweb.model.question.Answer;
 import com.case6.quizchallengeweb.model.question.Category;
 import com.case6.quizchallengeweb.model.question.Question;
+import com.case6.quizchallengeweb.repository.question.AnswerRepository;
 import com.case6.quizchallengeweb.repository.question.CategoryRepository;
 import com.case6.quizchallengeweb.repository.question.QuestionRepository;
 import org.hibernate.annotations.AttributeAccessor;
@@ -12,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class QuestionService implements IQuestionService {
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -26,8 +32,16 @@ public class QuestionService implements IQuestionService {
         return questionRepository.findAll();
     }
 
+
+
     @Override
     public Question save(Question question) {
+        Set<Answer> answers = question.getAnswers();
+        for (Answer answer : answers
+        ){
+            answer.setQuestion(question);
+                answerRepository.save(answer);
+        }
         return questionRepository.save(question);
     }
 
