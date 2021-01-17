@@ -1,11 +1,12 @@
 package com.case6.quizchallengeweb.service.user.appuser;
-
 import com.case6.quizchallengeweb.model.user.AppRole;
 import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.model.user.UserPrinciple;
 import com.case6.quizchallengeweb.repository.user.AppUserRepository;
 import com.case6.quizchallengeweb.service.user.approle.IAppRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 @Service
-
-
 public class AppUserService implements IAppUserService {
     @Autowired
     private AppUserRepository appUserRepository;
@@ -63,6 +61,20 @@ public class AppUserService implements IAppUserService {
     @Override
     public AppUser findByUsername(String username) {
         return appUserRepository.findByUsername(username).get();
+    }
+
+
+    @Override
+    public AppUser getUserByName(String name) {
+        return appUserRepository.getAppUserByUsername(name);
+    }
+
+    @Override
+    public AppUser getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        AppUser appUser = this.getUserByName(name);
+        return appUser;
     }
 
 }

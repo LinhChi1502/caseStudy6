@@ -6,10 +6,7 @@ import com.case6.quizchallengeweb.service.question.answer.IAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
@@ -21,5 +18,15 @@ public class AnswerController {
     @GetMapping
     public ResponseEntity<Iterable<Answer>> findAllAnswer(){
         return new ResponseEntity<>(answerService.getAll(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Answer> createAnswer(@RequestBody Answer answer){
+        try {
+            answerService.save(answer);
+            return new ResponseEntity<>(answer, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

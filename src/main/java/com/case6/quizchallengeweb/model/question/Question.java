@@ -1,6 +1,7 @@
 package com.case6.quizchallengeweb.model.question;
 
 import com.case6.quizchallengeweb.model.exam.Exam;
+import com.case6.quizchallengeweb.model.exam.ExamQuestion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Question {
 
     private String title;
 
-    private boolean isActive;
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -32,10 +33,11 @@ public class Question {
     private Type type;
 
 
+
     @OneToMany(mappedBy = "question",fetch = FetchType.EAGER)
     private Set<Answer> answers;
 
-    @ManyToMany(mappedBy = "questions")
     @JsonIgnore
-    private Set<Exam> exams = new HashSet<>();
+    @OneToMany(mappedBy = "question",fetch = FetchType.LAZY)
+    private Set<ExamQuestion> examQuestions;
 }

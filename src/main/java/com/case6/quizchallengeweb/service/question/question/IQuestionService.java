@@ -15,6 +15,9 @@ public interface IQuestionService extends IService<Question> {
 
     List<Question> getAllQuestByTypeIsAndCategoryIsAndTitleContaining(String type, String Category, String title);
 
+    List<Question> getAllQuestionByExamId(Long id);
+
+
 //    Iterable<Question> getAllQuestByTitleContaining(String title);
 //
 //    Iterable<Question> getAllQuestByType_NameAndTitleContaining(String type, String title);

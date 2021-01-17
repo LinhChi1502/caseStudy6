@@ -1,8 +1,11 @@
 package com.case6.quizchallengeweb.service.question.question;
 
+import com.case6.quizchallengeweb.model.exam.Exam;
+import com.case6.quizchallengeweb.model.exam.ExamQuestion;
 import com.case6.quizchallengeweb.model.question.Answer;
 import com.case6.quizchallengeweb.model.question.Category;
 import com.case6.quizchallengeweb.model.question.Question;
+import com.case6.quizchallengeweb.repository.exam.ExamRepository;
 import com.case6.quizchallengeweb.repository.question.AnswerRepository;
 import com.case6.quizchallengeweb.repository.question.CategoryRepository;
 import com.case6.quizchallengeweb.repository.question.QuestionRepository;
@@ -26,6 +29,8 @@ public class QuestionService implements IQuestionService {
     private QuestionRepository questionRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ExamRepository examRepository;
 
     @Override
     public Iterable<Question> getAll() {
@@ -33,17 +38,24 @@ public class QuestionService implements IQuestionService {
     }
 
 
-
     @Override
     public Question save(Question question) {
         Set<Answer> answers = question.getAnswers();
+
         for (Answer answer : answers
-        ){
+        ) {
             answer.setQuestion(question);
-                answerRepository.save(answer);
+
+        }
+        questionRepository.save(question);
+        for (Answer answer : answers
+        ) {
+            answerRepository.save(answer);
         }
         return questionRepository.save(question);
+
     }
+
 
     @Override
     public Optional<Question> findById(Long id) {
@@ -69,14 +81,11 @@ public class QuestionService implements IQuestionService {
     @Override
     public Question disableQuestion(long id) {
         Question disableQuestion = questionRepository.findById(id).get();
-        if (disableQuestion.getAnswers().size() != 0) {
-            return questionRepository.findById(id).get();
-        } else {
+        if (disableQuestion.getExamQuestions().size() == 0) {
             disableQuestion.setActive(false);
             questionRepository.save(disableQuestion);
             return disableQuestion;
-        }
-
+        } else return null;
     }
 
     @Override
@@ -97,11 +106,11 @@ public class QuestionService implements IQuestionService {
         if (!type.equals("") && !category.equals("")) {
             questions = questionRepository.getAllByType_NameAndCategory_NameAndTitleContaining(type, category, title);
         } else if (type.equals("") && category.equals("")) {
-             questions = questionRepository.getAllByTitleContaining(title);
+            questions = questionRepository.getAllByTitleContaining(title);
         } else if (!type.equals("")) {
-             questions = questionRepository.getAllByType_NameAndTitleContaining(type, title);
+            questions = questionRepository.getAllByType_NameAndTitleContaining(type, title);
         } else {
-             questions = questionRepository.getAllByCategory_NameAndTitleContaining(category, title);
+            questions = questionRepository.getAllByCategory_NameAndTitleContaining(category, title);
         }
 
         List<Question> questionsList = new ArrayList<>();
@@ -112,6 +121,19 @@ public class QuestionService implements IQuestionService {
         return questionsList;
 
 
+    }
+
+    @Override
+    public List<Question> getAllQuestionByExamId(Long id) {
+        Exam exam = examRepository.findById(id).get();
+
+        List<Question> questions = new ArrayList<>();
+        Set<ExamQuestion> examQuestions = exam.getExamQuestions();
+        for (ExamQuestion examQuestion : examQuestions
+        ) {
+            questions.add(examQuestion.getQuestion());
+        }
+        return questions;
     }
 
 

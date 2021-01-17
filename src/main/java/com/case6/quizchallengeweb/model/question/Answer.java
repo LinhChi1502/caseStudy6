@@ -15,7 +15,7 @@ public class Answer {
 
     private String content;
 
-    private boolean isCorrect;
+    private boolean correct;
 
     @ManyToOne
     @JsonIgnore

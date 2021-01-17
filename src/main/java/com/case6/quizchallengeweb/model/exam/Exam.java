@@ -24,11 +24,6 @@ public class Exam {
     @UpdateTimestamp
     private Date date;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable
-    private Set<Question> questions = new HashSet<>();
-
-    @OneToMany(mappedBy = "exam")
-    private Set<UserExam> userExams;
+    @OneToMany(mappedBy = "exam",cascade = CascadeType.ALL)
+    private Set<ExamQuestion> examQuestions;
 }

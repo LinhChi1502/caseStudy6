@@ -19,4 +19,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Iterable<Question> getAllByCategory_NameAndTitleContaining(String Category, String title);
 
+
+
+
+
 }
