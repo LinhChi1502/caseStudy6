@@ -3,7 +3,9 @@ package com.case6.quizchallengeweb.service.exam.exam;
 import com.case6.quizchallengeweb.model.exam.Exam;
 import com.case6.quizchallengeweb.model.exam.ExamQuestion;
 import com.case6.quizchallengeweb.model.question.Question;
+import com.case6.quizchallengeweb.model.exam.UserExam;
 import com.case6.quizchallengeweb.repository.exam.ExamRepository;
+import com.case6.quizchallengeweb.repository.exam.UserExamRepository;
 import com.case6.quizchallengeweb.repository.question.QuestionExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class ExamService implements IExamService {
     private ExamRepository examRepository;
     @Autowired
     private QuestionExamRepository questionExamRepository;
+    @Autowired
+    private UserExamRepository userExamRepository;
 
     @Override
     public Iterable<Exam> getAll() {
@@ -60,5 +64,18 @@ public class ExamService implements IExamService {
     @Override
     public void delete(Long id) {
         examRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Exam> getAllExamByUserId(Long id) {
+        List<UserExam> allUserExamByUserId = userExamRepository.getAllByAppUserId(id);
+        List<Exam> examList = new ArrayList<>();
+        for (UserExam userExam : allUserExamByUserId
+        ){
+               examList.add(userExam.getExam());
+        }
+
+
+        return examList;
     }
 }
