@@ -10,18 +10,20 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "exam_question")
 public class ExamQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "examid")
     private Exam exam  ;
 
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "questid")
     private Question question  ;
 }

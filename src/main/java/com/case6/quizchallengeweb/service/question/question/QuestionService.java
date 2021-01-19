@@ -40,20 +40,16 @@ public class QuestionService implements IQuestionService {
 
     @Override
     public Question save(Question question) {
+        questionRepository.save(question);
         Set<Answer> answers = question.getAnswers();
 
-        for (Answer answer : answers
-        ) {
+        for (Answer answer : answers) {
             answer.setQuestion(question);
-
-        }
-        questionRepository.save(question);
-        for (Answer answer : answers
-        ) {
             answerRepository.save(answer);
         }
-        return questionRepository.save(question);
 
+        System.out.println(answers);
+        return questionRepository.save(question);
     }
 
 

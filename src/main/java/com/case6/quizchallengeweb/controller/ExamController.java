@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,6 +37,13 @@ public class ExamController {
         Optional<Exam> optionalExam = examService.findById(id);
         return optionalExam.map(exam -> new ResponseEntity<>(exam,HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping
+    public ResponseEntity<Exam> saveExam(@RequestBody Exam exam){
+        examService.save(exam);
+
+        return new ResponseEntity<>(exam, HttpStatus.OK);
     }
 
 }
