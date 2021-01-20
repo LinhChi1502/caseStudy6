@@ -3,6 +3,7 @@ package com.case6.quizchallengeweb.service.question.useranswer;
 import com.case6.quizchallengeweb.model.question.Answer;
 import com.case6.quizchallengeweb.model.question.Question;
 import com.case6.quizchallengeweb.model.question.UserAnswer;
+import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.repository.question.UserAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class UserAnswerService implements IUserAnswerService {
+
 
     @Autowired
     private UserAnswerRepository userAnswerRepository;
@@ -36,4 +38,10 @@ public class UserAnswerService implements IUserAnswerService {
         userAnswerRepository.deleteById(id);
     }
 
+    @Override
+    public List<UserAnswer> getAllUserAnswer(AppUser appUser, Long examId) {
+        List<UserAnswer> userAnswerList = userAnswerRepository.findAllByUserExam_AppUserAndUserExam_Id(appUser, examId);
+        return userAnswerList;
+
+    }
 }

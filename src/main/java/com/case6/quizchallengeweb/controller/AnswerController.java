@@ -2,13 +2,19 @@ package com.case6.quizchallengeweb.controller;
 
 import com.case6.quizchallengeweb.model.question.Answer;
 import com.case6.quizchallengeweb.model.question.Category;
+import com.case6.quizchallengeweb.model.question.UserAnswer;
+import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.service.question.answer.IAnswerService;
+import com.case6.quizchallengeweb.service.question.useranswer.IUserAnswerService;
+import com.case6.quizchallengeweb.service.user.appuser.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +23,15 @@ import java.util.Optional;
 public class AnswerController {
     @Autowired
     private IAnswerService answerService;
+    @Autowired
+    private IAppUserService userService;
+    @Autowired
+    private IUserAnswerService userAnswerService;
+
+    @ModelAttribute("user")
+    public AppUser user() {
+        return userService.getCurrentUser();
+    }
 
     @GetMapping
     public ResponseEntity<Iterable<Answer>> findAllAnswer(){
@@ -52,5 +67,16 @@ public class AnswerController {
             answerService.delete(id);
             return new ResponseEntity<Answer>(HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/current-user/{examId}")
+    public ResponseEntity<List<UserAnswer>> getAllCurrentUserAnswer(@PathVariable Long id){
+        AppUser currentUser = this.user();
+
+        List<UserAnswer> allUserAnswer = userAnswerService.getAllUserAnswer(currentUser, id);
+
+
+        return new ResponseEntity<>(allUserAnswer,HttpStatus.ACCEPTED);
+
     }
 }
