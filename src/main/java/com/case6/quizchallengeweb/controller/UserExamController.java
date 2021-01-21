@@ -59,4 +59,10 @@ public class UserExamController {
         this.userExamService.save(userExam);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserExam> deleteUserExamById(@PathVariable Long id){
+        this.userExamService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

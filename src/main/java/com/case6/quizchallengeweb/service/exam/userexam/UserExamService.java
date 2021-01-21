@@ -42,7 +42,7 @@ public class UserExamService implements IUserExamService {
 
     @Override
     public void delete(Long id) {
-        userExamRepository.deleteById(id);
+        userExamRepository.deleteUserExamById(id);
     }
 
     @Override
