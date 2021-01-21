@@ -10,7 +10,7 @@ import java.util.List;
 public interface IUserExamService extends IService<UserExam> {
 //    List<UserExam> getAllByAppUserId(Long id);
 
-    List<UserExam> getAllById(Long id);
+    List<UserExam> getUserExamById(Long id);
 
     UserExam getByAppUserIdAndExamId(Long appUserId, Long examId);
 

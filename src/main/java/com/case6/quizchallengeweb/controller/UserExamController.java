@@ -41,7 +41,7 @@ public class UserExamController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<UserExam>> getUserExamById(@PathVariable Long id) {
-        List<UserExam> allUserExamByUserID = userExamService.getAllById(id);
+        List<UserExam> allUserExamByUserID = userExamService.getUserExamById(id);
         return new ResponseEntity<>(allUserExamByUserID, HttpStatus.OK);
 
     }
