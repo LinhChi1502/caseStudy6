@@ -57,6 +57,8 @@ public class UserExamService implements IUserExamService {
 
     @Override
     public double countMark(AppUser appUser, Exam exam) {
+        Long id = appUser.getId();
+        Long id1 = exam.getId();
         UserExam userExam = userExamRepository.getByAppUserIdAndExamId(appUser.getId(), exam.getId());
         Set<UserAnswer> userAnswers = userExam.getUserAnswers();
 
@@ -123,5 +125,10 @@ public class UserExamService implements IUserExamService {
     @Override
     public List<UserExam> getAllByExamId(Long id) {
         return userExamRepository.getAllByExamId(id);
+    }
+
+    @Override
+    public List<UserExam> getAllById(Long id) {
+        return userExamRepository.getAllById(id);
     }
 }

@@ -28,8 +28,6 @@ public class ExamService implements IExamService {
     private QuestionExamRepository questionExamRepository;
     @Autowired
     private IUserExamService userExamService;
-    @Autowired
-    private UserExamRepository userExamRepository;
 
     @Override
     public Iterable<Exam> getAll() {
@@ -77,17 +75,6 @@ public class ExamService implements IExamService {
         List<UserExam> allUserExams = userExamRepository.getAllByAppUserId(id);
         List<Exam> examList = new ArrayList<>();
         for (UserExam userExam:
-                allUserExams) {
-            examList.add(userExam.getExam());
-        }
-        return examList;
-    }
-
-    @Override
-    public List<Exam> getAllExamByUserId(Long id) {
-        List<UserExam> allUserExams = userExamRepository.getAllByAppUserId(id);
-        List<Exam> examList = new ArrayList<>();
-        for (UserExam userExam :
                 allUserExams) {
             examList.add(userExam.getExam());
         }
