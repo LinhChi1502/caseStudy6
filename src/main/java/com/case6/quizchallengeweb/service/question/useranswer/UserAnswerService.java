@@ -41,4 +41,9 @@ public class UserAnswerService implements IUserAnswerService {
             this.userAnswerRepository.saveAll(arr);
     }
 
+    @Override
+    public List<UserAnswer> getUserAnswersByUserExamId(Long id) {
+        return this.userAnswerRepository.getUserAnswersByUserExamId(id);
+    }
+
 }

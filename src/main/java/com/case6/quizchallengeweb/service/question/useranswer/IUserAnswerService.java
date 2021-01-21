@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface IUserAnswerService extends IService<UserAnswer> {
     void saveArrayUserAnswer(Iterable<UserAnswer> arr);
+
+    List<UserAnswer> getUserAnswersByUserExamId(Long id);
 }
