@@ -56,7 +56,7 @@ public class UserExamController {
 
     @PostMapping
     public ResponseEntity<UserExam> saveNewUserExam(@RequestBody UserExam userExam){
-        userExam.setAppUser(this.appUserService.findById((long) 5).get());
+//        userExam.setAppUser(this.appUserService.findById((long) 5).get());
         this.userExamService.save(userExam);
         return new ResponseEntity<>(HttpStatus.OK);
     }
