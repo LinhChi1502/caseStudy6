@@ -1,6 +1,7 @@
 package com.case6.quizchallengeweb.model.user;
 
 import com.case6.quizchallengeweb.model.exam.UserExam;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<AppRole> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "appUser")
+    @JsonIgnore
     private Set<UserExam> userExams;
 }
