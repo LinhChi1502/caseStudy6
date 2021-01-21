@@ -49,4 +49,9 @@ public class UserAnswerService implements IUserAnswerService {
     }
 
 
+    @Override
+    public void saveArrayUserAnswer(Iterable<UserAnswer> arr){
+            this.userAnswerRepository.saveAll(arr);
+    }
+
 }

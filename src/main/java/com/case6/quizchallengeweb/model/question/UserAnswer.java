@@ -23,6 +23,6 @@ public class UserAnswer {
 
     @ManyToOne
     @JoinColumn(name = "userExam")
-    @JsonIgnore
+//    @JsonIgnore
     private UserExam userExam;
 }

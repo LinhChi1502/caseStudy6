@@ -2,6 +2,7 @@ package com.case6.quizchallengeweb.model.exam;
 
 import com.case6.quizchallengeweb.model.question.UserAnswer;
 import com.case6.quizchallengeweb.model.user.AppUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,7 @@ public class UserExam {
     @JoinColumn(name = "exam_id")
     private Exam exam;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userExam",fetch = FetchType.EAGER)
     private Set<UserAnswer> userAnswers;
 }

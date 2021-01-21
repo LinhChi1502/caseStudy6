@@ -1,6 +1,8 @@
 package com.case6.quizchallengeweb.controller;
 
 import com.case6.quizchallengeweb.model.question.Answer;
+import com.case6.quizchallengeweb.model.question.Category;
+import com.case6.quizchallengeweb.model.user.AppRole;
 import com.case6.quizchallengeweb.model.user.AppRole;
 import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.service.user.appuser.AppUserService;
@@ -24,7 +26,7 @@ public class UserController {
     AppUserService appUserService;
 
     @GetMapping
-    public ResponseEntity<Iterable<AppUser>> findAllUser() {
+    public ResponseEntity<Iterable<AppUser>> findAllUser(){
         return new ResponseEntity<>(appUserService.getAll(), HttpStatus.OK);
     }
 
@@ -49,4 +51,7 @@ public class UserController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
+
 }
+

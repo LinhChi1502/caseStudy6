@@ -2,6 +2,9 @@ package com.case6.quizchallengeweb.controller;
 
 import com.case6.quizchallengeweb.model.exam.Exam;
 import com.case6.quizchallengeweb.model.exam.UserExam;
+import com.case6.quizchallengeweb.model.question.Category;
+import com.case6.quizchallengeweb.model.user.AppUser;
+import com.case6.quizchallengeweb.model.question.UserAnswer;
 import com.case6.quizchallengeweb.service.exam.exam.IExamService;
 import com.case6.quizchallengeweb.service.exam.userexam.IUserExamService;
 import com.case6.quizchallengeweb.service.question.useranswer.IUserAnswerService;
@@ -18,14 +21,17 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping("/api/userexams")
 public class UserExamController {
+
     @Autowired
     private IUserExamService userExamService;
     @Autowired
     private IAppUserService appUserService;
     @Autowired
     private IExamService examService;
+
     @Autowired
     private IUserAnswerService userAnswerService;
+
     @GetMapping
     public ResponseEntity<Iterable<UserExam>> getAllUserExam() {
         Iterable<UserExam> all = userExamService.getAll();
@@ -40,7 +46,7 @@ public class UserExamController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<UserExam>> getUserExamById(@PathVariable Long id) {
-        List<UserExam> allUserExamByUserID = userExamService.getAllByAppUserId(id);
+        List<UserExam> allUserExamByUserID = userExamService.getAllById(id);
         return new ResponseEntity<>(allUserExamByUserID, HttpStatus.OK);
 
     }
@@ -51,5 +57,12 @@ public class UserExamController {
         return optionalUserExam.map(userExam
                 -> new ResponseEntity(userExamService.countMark(userExam.getAppUser(), userExam.getExam()), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserExam> saveNewUserExam(@RequestBody UserExam userExam){
+        userExam.setAppUser(this.appUserService.findById((long) 5).get());
+        this.userExamService.save(userExam);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

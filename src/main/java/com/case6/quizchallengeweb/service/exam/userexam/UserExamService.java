@@ -46,8 +46,8 @@ public class UserExamService implements IUserExamService {
     }
 
     @Override
-    public List<UserExam> getAllByAppUserId(Long id) {
-        return userExamRepository.getAllByAppUserId(id);
+    public List<UserExam> getAllById(Long id) {
+        return userExamRepository.getAllById(id);
     }
 
     @Override
@@ -113,5 +113,15 @@ public class UserExamService implements IUserExamService {
 
         int questionSize = questions.size();
         return Math.round(mark/questionSize * 100);
+    }
+
+    @Override
+    public List<UserExam> getAllByAppUserId(Long id) {
+        return userExamRepository.getAllByAppUserId(id);
+    }
+
+    @Override
+    public List<UserExam> getAllByExamId(Long id) {
+        return userExamRepository.getAllByExamId(id);
     }
 }

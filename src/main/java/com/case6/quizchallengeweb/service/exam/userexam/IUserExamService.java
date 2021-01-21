@@ -13,4 +13,7 @@ public interface IUserExamService extends IService<UserExam> {
     UserExam getByAppUserIdAndExamId(Long appUserId, Long examId);
 
     double countMark(AppUser appUser, Exam exam);
+
+    List<UserExam> getAllByExamId(Long id);
+    public List<UserExam> getAllById(Long id);
 }

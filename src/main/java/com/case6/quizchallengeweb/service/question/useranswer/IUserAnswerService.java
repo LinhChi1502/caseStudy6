@@ -9,6 +9,7 @@ import com.case6.quizchallengeweb.service.IService;
 import java.util.List;
 
 public interface IUserAnswerService extends IService<UserAnswer> {
-    List<UserAnswer> getAllUserAnswer(AppUser appUser,Long examId);
+    void saveArrayUserAnswer(Iterable<UserAnswer> arr);
+    List<UserAnswer> getAllUserAnswer(AppUser appUser, Long examId);
 
 }
