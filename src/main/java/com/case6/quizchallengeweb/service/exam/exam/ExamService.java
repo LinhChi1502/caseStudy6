@@ -12,10 +12,7 @@ import com.case6.quizchallengeweb.service.question.useranswer.IUserAnswerService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ExamService implements IExamService {
@@ -122,5 +119,42 @@ public class ExamService implements IExamService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<Exam> getTop5TestedExam() {
+        List<Exam> allTestedExams = this.getAllTestedExams();
+        Map<Exam, Integer> map = new HashMap<>();
+        for (Exam exam :
+                allTestedExams) {
+            List<UserExam> allUserExams = userExamService.getAllByExamId(exam.getId());
+            int count = 0;
+            for (UserExam userExam :
+                    allUserExams) {
+                count++;
+            }
+            map.put(exam, count);
+        }
+//        Set<Map.Entry<Exam, Integer>> entries = map.entrySet();
+        List<Map.Entry<Exam, Integer>> list = new ArrayList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Exam, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Exam, Integer> o1, Map.Entry<Exam, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        List<Exam> top5Exams = new ArrayList<>();
+        if (list.size() < 5) {
+            for (int i = 0; i < list.size(); i++) {
+                top5Exams.add(list.get(i).getKey());
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                Exam key = list.get(i).getKey();
+                top5Exams.add(key);
+            }
+        }
+
+        return top5Exams;
     }
 }

@@ -56,9 +56,10 @@ public class UserExamService implements IUserExamService {
     }
 
     @Override
-    public List<UserExam> getAllByAppUserId(Long id){
-        return userExamRepository.getAllByAppUserId(id);
+    public UserExam getUserExamById(Long id) {
+        return userExamRepository.getUserExamById(id);
     }
+
 
     @Override
     public double countMark(AppUser appUser, Exam exam) {
