@@ -34,14 +34,14 @@ public class UserExamController {
     }
 
     @GetMapping("/exam-list/{id}")
-    public ResponseEntity<List<Exam>> getAllExamByUserId(@PathVariable Long id) {
-        List<Exam> allExamByUserId = examService.getAllExamByUserId(id);
-        return new ResponseEntity<>(allExamByUserId, HttpStatus.OK);
+    public ResponseEntity<List<UserExam>> getAllExamByUserId(@PathVariable Long id) {
+        List<UserExam> allUserExamByUserId = userExamService.getAllByAppUserId(id);
+        return new ResponseEntity<>(allUserExamByUserId, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<UserExam>> getUserExamById(@PathVariable Long id) {
-        List<UserExam> allUserExamByUserID = userExamService.getUserExamById(id);
+    public ResponseEntity<UserExam> getUserExamById(@PathVariable Long id) {
+        UserExam allUserExamByUserID = userExamService.getUserExamById(id);
         return new ResponseEntity<>(allUserExamByUserID, HttpStatus.OK);
 
     }
@@ -56,7 +56,6 @@ public class UserExamController {
 
     @PostMapping
     public ResponseEntity<UserExam> saveNewUserExam(@RequestBody UserExam userExam){
-//        userExam.setAppUser(this.appUserService.findById((long) 5).get());
         this.userExamService.save(userExam);
         return new ResponseEntity<>(HttpStatus.OK);
     }

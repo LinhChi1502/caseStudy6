@@ -46,13 +46,18 @@ public class UserExamService implements IUserExamService {
     }
 
     @Override
-    public List<UserExam> getUserExamById(Long id) {
+    public UserExam getUserExamById(Long id) {
         return userExamRepository.getUserExamById(id);
     }
 
     @Override
     public UserExam getByAppUserIdAndExamId(Long appUserId, Long examId) {
         return userExamRepository.getByAppUserIdAndExamId(appUserId, examId);
+    }
+
+    @Override
+    public List<UserExam> getAllByAppUserId(Long id){
+        return userExamRepository.getAllByAppUserId(id);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface UserExamRepository extends JpaRepository<UserExam, Long> {
-    List<UserExam> getUserExamById(Long id);
+    UserExam getUserExamById(Long id);
 
     List<UserExam> getAllByAppUserId(Long id);
 
