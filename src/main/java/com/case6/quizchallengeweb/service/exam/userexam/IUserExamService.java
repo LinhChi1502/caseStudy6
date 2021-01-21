@@ -16,4 +16,7 @@ public interface IUserExamService extends IService<UserExam> {
 
     List<UserExam> getAllByExamId(Long id);
 
+    List<UserExam> getAllById(Long id);
+
+
 }
