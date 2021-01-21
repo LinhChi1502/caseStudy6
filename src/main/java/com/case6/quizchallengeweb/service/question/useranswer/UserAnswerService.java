@@ -4,6 +4,7 @@ import com.case6.quizchallengeweb.model.question.Answer;
 import com.case6.quizchallengeweb.model.question.Question;
 import com.case6.quizchallengeweb.model.question.UserAnswer;
 import com.case6.quizchallengeweb.model.user.AppUser;
+import com.case6.quizchallengeweb.repository.exam.ExamRepository;
 import com.case6.quizchallengeweb.repository.question.UserAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,8 @@ import java.util.Optional;
 
 @Service
 public class UserAnswerService implements IUserAnswerService {
-
+    @Autowired
+    private ExamRepository examRepository;
 
     @Autowired
     private UserAnswerRepository userAnswerRepository;
@@ -40,8 +42,11 @@ public class UserAnswerService implements IUserAnswerService {
 
     @Override
     public List<UserAnswer> getAllUserAnswer(AppUser appUser, Long examId) {
-        List<UserAnswer> userAnswerList = userAnswerRepository.findAllByUserExam_AppUserAndUserExam_Id(appUser, examId);
-        return userAnswerList;
+        Long id = appUser.getId();
+        List<UserAnswer> userAnswerList = userAnswerRepository.getAllByUserExam_AppUser_IdAndUserExam_Exam(id, examRepository.findById(examId).get());
 
+        return userAnswerList;
     }
+
+
 }

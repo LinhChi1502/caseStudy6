@@ -34,12 +34,12 @@ public class AnswerController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Answer>> findAllAnswer(){
+    public ResponseEntity<Iterable<Answer>> findAllAnswer() {
         return new ResponseEntity<>(answerService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Answer> createAnswer(@RequestBody Answer answer){
+    public ResponseEntity<Answer> createAnswer(@RequestBody Answer answer) {
         try {
             answerService.save(answer);
             return new ResponseEntity<>(answer, HttpStatus.ACCEPTED);
@@ -69,14 +69,11 @@ public class AnswerController {
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/current-user/{examId}")
-    public ResponseEntity<List<UserAnswer>> getAllCurrentUserAnswer(@PathVariable Long id){
-        AppUser currentUser = this.user();
-
-        List<UserAnswer> allUserAnswer = userAnswerService.getAllUserAnswer(currentUser, id);
-
-
-        return new ResponseEntity<>(allUserAnswer,HttpStatus.ACCEPTED);
+    @GetMapping("/current-user/{userid}/{examid}")
+    public ResponseEntity<List<UserAnswer>> getAllCurrentUserAnswer(@PathVariable Long userid,@PathVariable Long examid) {
+        AppUser fakeCurrentUser = this.userService.findById(userid).get();
+        List<UserAnswer> allUserAnswer = userAnswerService.getAllUserAnswer(fakeCurrentUser, examid);
+        return new ResponseEntity<>(allUserAnswer, HttpStatus.ACCEPTED);
 
     }
 }
