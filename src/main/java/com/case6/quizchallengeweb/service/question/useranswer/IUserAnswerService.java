@@ -11,4 +11,6 @@ import java.util.List;
 public interface IUserAnswerService extends IService<UserAnswer> {
     void saveArrayUserAnswer(Iterable<UserAnswer> arr);
     List<UserAnswer> toan_getAllUserAnswer(AppUser appUser, Long examId);
+
+    List<UserAnswer> getUserAnswersByUserExamId(Long id);
 }

@@ -99,7 +99,7 @@ public class ExamService implements IExamService {
         List<UserExam> allUserExams = userExamService.getAllByExamId(id);
         for (UserExam userExam :
                 allUserExams) {
-            double mark = userExamService.countMark(userExam.getAppUser(), userExam.getExam());
+            double mark = userExamService.countMark(userExam.getId());
             if (mark > 50) {
                 result += 1;
             }
@@ -113,7 +113,7 @@ public class ExamService implements IExamService {
         List<UserExam> allUserExams = userExamService.getAllByExamId(id);
         for (UserExam userExam :
                 allUserExams) {
-            double mark = userExamService.countMark(userExam.getAppUser(), userExam.getExam());
+            double mark = userExamService.countMark(userExam.getId());
             if (mark <= 50) {
                 result += 1;
             }

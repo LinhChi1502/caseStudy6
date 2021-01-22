@@ -56,7 +56,7 @@ public class UserExamController {
     public ResponseEntity<Double> countMark(@PathVariable Long id) {
         Optional<UserExam> optionalUserExam = userExamService.findById(id);
         return optionalUserExam.map(userExam
-                -> new ResponseEntity(userExamService.countMark(userExam.getAppUser(), userExam.getExam()), HttpStatus.OK))
+                -> new ResponseEntity(userExamService.countMark(id), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
@@ -79,5 +79,16 @@ public class UserExamController {
             dataList.add(data);
         }
         return new ResponseEntity<>(dataList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserExam> deleteUserExamById(@PathVariable Long id){
+        this.userExamService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/notnull-exam-list/{id}")
+    public ResponseEntity<List<UserExam>> notNullUserExamList(@PathVariable Long id) {
+        return new ResponseEntity<>(userExamService.notNullUserExamList(id), HttpStatus.OK);
     }
 }

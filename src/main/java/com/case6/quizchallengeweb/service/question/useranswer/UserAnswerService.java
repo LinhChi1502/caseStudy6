@@ -54,4 +54,9 @@ public class UserAnswerService implements IUserAnswerService {
 
         return userAnswerList;
     }
+    @Override
+    public List<UserAnswer> getUserAnswersByUserExamId(Long id) {
+        return this.userAnswerRepository.getUserAnswersByUserExamId(id);
+    }
+
 }

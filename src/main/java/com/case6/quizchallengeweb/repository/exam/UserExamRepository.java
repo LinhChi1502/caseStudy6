@@ -15,6 +15,8 @@ public interface UserExamRepository extends JpaRepository<UserExam, Long> {
 
     UserExam getByAppUserIdAndExamId(Long appUserId, Long examId);
 
+    void deleteUserExamById(Long id);
+
     List<UserExam> getAllById(Long id);
 
     UserExam getUserExamById(Long id);
