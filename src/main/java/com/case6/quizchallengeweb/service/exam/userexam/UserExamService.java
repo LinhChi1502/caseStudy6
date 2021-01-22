@@ -46,8 +46,8 @@ public class UserExamService implements IUserExamService {
     }
 
     @Override
-    public UserExam getUserExamById(Long id) {
-        return userExamRepository.getUserExamById(id);
+    public List<UserExam> getAllByAppUserId(Long id) {
+        return userExamRepository.getAllByAppUserId(id);
     }
 
     @Override
@@ -56,12 +56,15 @@ public class UserExamService implements IUserExamService {
     }
 
     @Override
-    public List<UserExam> getAllByAppUserId(Long id){
-        return userExamRepository.getAllByAppUserId(id);
+    public UserExam getUserExamById(Long id) {
+        return userExamRepository.getUserExamById(id);
     }
+
 
     @Override
     public double countMark(AppUser appUser, Exam exam) {
+        Long id = appUser.getId();
+        Long id1 = exam.getId();
         UserExam userExam = userExamRepository.getByAppUserIdAndExamId(appUser.getId(), exam.getId());
         Set<UserAnswer> userAnswers = userExam.getUserAnswers();
 
@@ -89,9 +92,12 @@ public class UserExamService implements IUserExamService {
 
             if (question.getType().getId() == 4) {
                 int userTrueAnswerCount = 0;
+                int userFalseAnswerCount = 0;
+                int userAnswerSize = 0;
                 int correctAnswerCount = correctAnswers.size();
                 for (UserAnswer userAnswer : userAnswerList) {
                     if (userAnswer.getQuestionIndex() == question.getId()) {
+                        userAnswerSize += 1;
                         for (Answer answer : correctAnswers) {
                             if (userAnswer.getContent().equalsIgnoreCase(answer.getContent())) {
                                 userTrueAnswerCount += 1;
@@ -99,7 +105,9 @@ public class UserExamService implements IUserExamService {
                         }
                     }
                 }
-                mark += (userTrueAnswerCount / correctAnswerCount);
+
+                userFalseAnswerCount = userAnswerSize - userTrueAnswerCount;
+                mark += ((userTrueAnswerCount - 1.5 * userFalseAnswerCount) / correctAnswerCount);
             }
 
             if (question.getType().getId() == 3) {
@@ -107,7 +115,7 @@ public class UserExamService implements IUserExamService {
                     if (userAnswer.getQuestionIndex() == question.getId()) {
                         for (Answer answer : correctAnswers) {
                             if (userAnswer.getContent().equalsIgnoreCase(answer.getContent())) {
-                                mark+=1;
+                                mark += 1;
                             }
                         }
                     }
@@ -117,6 +125,16 @@ public class UserExamService implements IUserExamService {
         }
 
         int questionSize = questions.size();
-        return Math.round(mark/questionSize * 100);
+        return Math.round(mark / questionSize * 100);
+    }
+
+    @Override
+    public List<UserExam> getAllByExamId(Long id) {
+        return userExamRepository.getAllByExamId(id);
+    }
+
+    @Override
+    public List<UserExam> getAllById(Long id) {
+        return userExamRepository.getAllById(id);
     }
 }

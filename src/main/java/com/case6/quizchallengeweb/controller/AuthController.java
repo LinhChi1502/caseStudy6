@@ -12,8 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -52,9 +53,22 @@ public class AuthController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+    @PutMapping(value = "/new-password/{id}")
+    public ResponseEntity<AppUser> updatePassword(@PathVariable Long id, @RequestBody AppUser user) {
+        Optional<AppUser> userOptional = this.userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        user.setId(userOptional.get().getId());
+        user.setUsername(userOptional.get().getUsername());
+        user.setFullname(userOptional.get().getFullname());
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return new ResponseEntity<>("Hello", HttpStatus.OK);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<AppUser> getProfile(@PathVariable Long id) {
+        Optional<AppUser> userOptional = this.userService.findById(id);
+        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

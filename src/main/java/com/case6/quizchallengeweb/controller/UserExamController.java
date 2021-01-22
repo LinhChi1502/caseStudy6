@@ -1,8 +1,8 @@
 package com.case6.quizchallengeweb.controller;
 
+import com.case6.quizchallengeweb.model.Data;
 import com.case6.quizchallengeweb.model.exam.Exam;
 import com.case6.quizchallengeweb.model.exam.UserExam;
-import com.case6.quizchallengeweb.model.question.UserAnswer;
 import com.case6.quizchallengeweb.service.exam.exam.IExamService;
 import com.case6.quizchallengeweb.service.exam.userexam.IUserExamService;
 import com.case6.quizchallengeweb.service.question.useranswer.IUserAnswerService;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +20,19 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping("/api/userexams")
 public class UserExamController {
+
     @Autowired
     private IUserExamService userExamService;
+
     @Autowired
     private IAppUserService appUserService;
+
     @Autowired
     private IExamService examService;
+
     @Autowired
     private IUserAnswerService userAnswerService;
+
     @GetMapping
     public ResponseEntity<Iterable<UserExam>> getAllUserExam() {
         Iterable<UserExam> all = userExamService.getAll();
@@ -58,6 +64,21 @@ public class UserExamController {
     public ResponseEntity<UserExam> saveNewUserExam(@RequestBody UserExam userExam){
         this.userExamService.save(userExam);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<Data>> getStatistics() {
+        List<Exam> top5TestedExam = examService.getTop5TestedExam();
+        List<Data> dataList = new ArrayList<>();
+        for (Exam exam:
+                top5TestedExam) {
+            String examName = exam.getName();
+            int up50 = examService.get50UpUserCountByExamId(exam.getId());
+            int down50 = examService.get50DownUserCountByExamId(exam.getId());
+            Data data = new Data(examName, up50, down50);
+            dataList.add(data);
+        }
+        return new ResponseEntity<>(dataList, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -25,6 +25,7 @@ public class ExamController {
 
     @Autowired
     private IQuestionService questionService;
+
     
 
     @GetMapping
@@ -46,4 +47,21 @@ public class ExamController {
         return new ResponseEntity<>(exam, HttpStatus.OK);
     }
 
+    @GetMapping("/tested")
+    public ResponseEntity<List<Exam>> getAllTestedExams() {
+        List<Exam> allTestedExams = examService.getAllTestedExams();
+        return new ResponseEntity<>(allTestedExams, HttpStatus.OK);
+    }
+
+    @GetMapping("/up50/{id}")
+    public ResponseEntity<Integer> get50UpUserCountByExamId(@PathVariable Long id) {
+        int upUserCountByExamId = examService.get50UpUserCountByExamId(id);
+        return new ResponseEntity<>(upUserCountByExamId, HttpStatus.OK);
+    }
+
+    @GetMapping("/down50/{id}")
+    public ResponseEntity<Integer> get50DownUserCountByExamId(@PathVariable Long id) {
+        int downUserCountByExamId = examService.get50DownUserCountByExamId(id);
+        return new ResponseEntity<>(downUserCountByExamId, HttpStatus.OK);
+    }
 }

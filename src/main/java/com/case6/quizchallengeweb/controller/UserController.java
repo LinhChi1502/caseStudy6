@@ -1,6 +1,8 @@
 package com.case6.quizchallengeweb.controller;
 
 import com.case6.quizchallengeweb.model.question.Answer;
+import com.case6.quizchallengeweb.model.question.Category;
+import com.case6.quizchallengeweb.model.user.AppRole;
 import com.case6.quizchallengeweb.model.user.AppRole;
 import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.service.user.appuser.AppUserService;
@@ -18,6 +20,7 @@ import java.util.Set;
 public class UserController {
     @Autowired
     AppUserService appUserService;
+
     @GetMapping
     public ResponseEntity<Iterable<AppUser>> findAllUser(){
         return new ResponseEntity<>(appUserService.getAll(), HttpStatus.OK);
@@ -28,11 +31,11 @@ public class UserController {
         Optional<AppUser> optionalAppUser = appUserService.findById(id);
         return optionalAppUser.map(appUser1 -> {
             appUser.setId(appUser1.getId());
-            AppRole appRole = new AppRole();
-            appRole.setId(2L);
-            Set<AppRole> appRoles= appUser.getRoles();
-            appRoles.add(appRole);
-            appUser.setRoles(appRoles);
+           AppRole appRole = new AppRole();
+           appRole.setId(2L);
+           Set<AppRole> appRoles= appUser.getRoles();
+           appRoles.add(appRole);
+           appUser.setRoles(appRoles);
             return new ResponseEntity<>(appUserService.save(appUser), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

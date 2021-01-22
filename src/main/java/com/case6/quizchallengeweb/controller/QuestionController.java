@@ -63,6 +63,7 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity<Question> insertQuestion(@RequestBody Question question) {
+        question.setActive(true);
         Question insertQuestion = questionService.save(question);
         return new ResponseEntity<>(insertQuestion, HttpStatus.ACCEPTED);
     }
@@ -87,8 +88,14 @@ public class QuestionController {
     @GetMapping("/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
         Optional<Question> optionalQuestion = questionService.findById(id);
-        return optionalQuestion.map(question -> new ResponseEntity<>(question, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (optionalQuestion.isPresent()){
+            Question question = optionalQuestion.get();
+            return new ResponseEntity<>(question,HttpStatus.OK);
+        }else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+//        return optionalQuestion.map(question -> new ResponseEntity<>(question, HttpStatus.OK))
+//                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/quest-list/{id}")
