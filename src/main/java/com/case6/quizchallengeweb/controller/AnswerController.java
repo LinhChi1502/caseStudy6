@@ -1,7 +1,6 @@
 package com.case6.quizchallengeweb.controller;
 
 import com.case6.quizchallengeweb.model.question.Answer;
-import com.case6.quizchallengeweb.model.question.Category;
 import com.case6.quizchallengeweb.model.question.UserAnswer;
 import com.case6.quizchallengeweb.model.user.AppUser;
 import com.case6.quizchallengeweb.service.question.answer.IAnswerService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +65,7 @@ public class AnswerController {
     @GetMapping("/current-user/{userid}/{examid}")
     public ResponseEntity<List<UserAnswer>> getAllCurrentUserAnswer(@PathVariable Long userid, @PathVariable Long examid) {
         AppUser fakeCurrentUser = this.userService.findById(userid).get();
-        List<UserAnswer> allUserAnswer = userAnswerService.getAllUserAnswer(fakeCurrentUser, examid);
+        List<UserAnswer> allUserAnswer = userAnswerService.toan_getAllUserAnswer(fakeCurrentUser, examid);
         return new ResponseEntity<>(allUserAnswer, HttpStatus.ACCEPTED);
 
     }

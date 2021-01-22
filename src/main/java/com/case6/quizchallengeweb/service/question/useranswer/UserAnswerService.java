@@ -48,7 +48,7 @@ public class UserAnswerService implements IUserAnswerService {
 
 
     @Override
-    public List<UserAnswer> getAllUserAnswer(AppUser appUser, Long examId) {
+    public List<UserAnswer> toan_getAllUserAnswer(AppUser appUser, Long examId) {
         Long id = appUser.getId();
         List<UserAnswer> userAnswerList = userAnswerRepository.getAllByUserExam_AppUser_IdAndUserExam_Exam(id, examRepository.findById(examId).get());
 
