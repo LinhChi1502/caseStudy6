@@ -63,7 +63,7 @@ public class AnswerController {
     }
 
     @GetMapping("/current-user/{userid}/{examid}")
-    public ResponseEntity<List<UserAnswer>> getAllCurrentUserAnswer(@PathVariable Long userid, @PathVariable Long examid) {
+    public ResponseEntity<List<UserAnswer>> toan_getAllCurrentUserAnswer(@PathVariable Long userid, @PathVariable Long examid) {
         AppUser fakeCurrentUser = this.userService.findById(userid).get();
         List<UserAnswer> allUserAnswer = userAnswerService.toan_getAllUserAnswer(fakeCurrentUser, examid);
         return new ResponseEntity<>(allUserAnswer, HttpStatus.ACCEPTED);
