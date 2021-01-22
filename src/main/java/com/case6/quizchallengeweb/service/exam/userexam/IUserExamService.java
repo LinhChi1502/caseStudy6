@@ -12,7 +12,7 @@ public interface IUserExamService extends IService<UserExam> {
 
     UserExam getByAppUserIdAndExamId(Long appUserId, Long examId);
 
-    double countMark(AppUser appUser, Exam exam);
+    double countMark(Long id);
 
     List<UserExam> getAllByExamId(Long id);
 
@@ -20,4 +20,6 @@ public interface IUserExamService extends IService<UserExam> {
 
 
     UserExam getUserExamById(Long id);
+
+    List<UserExam> notNullUserExamList(Long id);
 }

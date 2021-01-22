@@ -62,17 +62,16 @@ public class UserExamService implements IUserExamService {
 
 
     @Override
-    public double countMark(AppUser appUser, Exam exam) {
-        Long id = appUser.getId();
-        Long id1 = exam.getId();
-        UserExam userExam = userExamRepository.getByAppUserIdAndExamId(appUser.getId(), exam.getId());
+    public double countMark(Long id) {
+
+        UserExam userExam = userExamRepository.getUserExamById(id);
         Set<UserAnswer> userAnswers = userExam.getUserAnswers();
 
         List<UserAnswer> userAnswerList = new ArrayList<>(userAnswers);
 
         double mark = 0;
         List<Question> questions = new ArrayList<>();
-
+        Exam exam = userExam.getExam();
         Set<ExamQuestion> examQuestions = exam.getExamQuestions();
         for (ExamQuestion examQuestion : examQuestions) {
             questions.add(examQuestion.getQuestion());
@@ -136,5 +135,18 @@ public class UserExamService implements IUserExamService {
     @Override
     public List<UserExam> getAllById(Long id) {
         return userExamRepository.getAllById(id);
+    }
+
+    @Override
+    public List<UserExam> notNullUserExamList(Long id) {
+        List<UserExam> allByAppUserId = userExamRepository.getAllByAppUserId(id);
+        List<UserExam> userExams = new ArrayList<>();
+        for (UserExam userExam:
+             allByAppUserId) {
+            if (userExam.getExam() != null) {
+                userExams.add(userExam);
+            }
+        }
+        return userExams;
     }
 }
